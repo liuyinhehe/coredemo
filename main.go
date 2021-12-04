@@ -5,6 +5,7 @@ import (
 	"net/http"
 )
 
+//主函数
 func main() {
 	server := &http.Server{
 		Handler: framework.NewCore(),
