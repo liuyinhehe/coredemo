@@ -12,10 +12,18 @@ import (
 	"time"
 )
 
+/*
+自定义原因：
+标准库 Context 接口的实现，只能控制链条结束，封装性并不够
+
+需要有更强大的 Context，除了可以控制超时之外，常用的功能比如获取请求、返回结果、实现标准库的 Context
+接口，也都要有
+*/
+//自定义Context
 type Context struct {
-	request        *http.Request
-	responseWriter http.ResponseWriter
-	ctx            context.Context
+	request        *http.Request       //对外提供请求
+	responseWriter http.ResponseWriter //对外提供结果
+	ctx            context.Context     //标准库的context
 	handler        ControllerHandler
 
 	// 是否超时标记位
@@ -33,8 +41,12 @@ func NewContext(r *http.Request, w http.ResponseWriter) *Context {
 	}
 }
 
-// #region base function
+/*
+封装的Context需提供四类功能函数
+*/
 
+//1.函数基本功能 #region base function
+//对外暴露锁
 func (ctx *Context) WriterMux() *sync.Mutex {
 	return ctx.writerMux
 }

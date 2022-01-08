@@ -1,11 +1,11 @@
-package framework
+package framework //框架代码存放于framework文件夹中，业务代码存放于文件夹之外
 
 import (
 	"log"
 	"net/http"
 )
 
-// Core represent core struct
+// Core represent core struct 框架核心结构
 type Core struct {
 	router map[string]ControllerHandler
 }
@@ -18,6 +18,7 @@ func (c *Core) Get(url string, handler ControllerHandler) {
 	c.router[url] = handler
 }
 
+//框架核心结构实现的handler接口
 func (c *Core) ServeHTTP(response http.ResponseWriter, request *http.Request) {
 	log.Println("core.serveHTTP")
 	ctx := NewContext(request, response)
@@ -30,5 +31,4 @@ func (c *Core) ServeHTTP(response http.ResponseWriter, request *http.Request) {
 	log.Println("core.router")
 
 	router(ctx)
-
 }
